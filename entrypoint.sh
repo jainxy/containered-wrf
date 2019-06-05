@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-sed -i "s/geog_data_path = .*/geog_data_path = '\/home\/wrf\/data\/'/" $HOME/WPS/namelist.wps
+sed -i "s/geog_data_path = .*/geog_data_path = '\/home\/wrf\/data\/'/" /home/wrf/WPS/namelist.wps
 
 for f in /home/wrf/scripts/*; do
     case "$f" in

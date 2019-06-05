@@ -238,9 +238,9 @@ install_all() {
     install_grads
     install_pygrads
     install_libgeos
-    install_anaconda
-    install_pyproj
-    install_basemap
+    #install_anaconda
+    #install_pyproj
+    #install_basemap
     install_cartopy
 }
 

@@ -1,11 +1,12 @@
-FROM ubuntu:latest
-MAINTAINER Rodrigo Cosme <rdccosmo@gmail.com>
+FROM ubuntu:16.04
 
 ENV DEBIAN_FRONTEND noninteractive
 RUN \
     apt-get update \
     && apt-get install -y software-properties-common \
     && add-apt-repository ppa:ubuntugis/ppa \
+    && apt-get update \
+    && rm -rf /var/lib/apt/lists/* \
     && apt-get update \
     && apt-get install -y --allow-unauthenticated \
         gfortran \
@@ -22,11 +23,7 @@ RUN \
         python \
         python-pip \
         python-tk \
-        python-matplotlib \
-        python-matplotlib-data \
-        python-imaging \
-        python-numpy \
-        python-scipy \
+        python-pil \
         python-systemd \
         libsystemd-dev \
         curl \
@@ -45,7 +42,7 @@ RUN \
         autotools-dev \
         autoconf \
         libproj9 \
-		libproj-dev \
+	libproj-dev \
         proj-bin \
         python-gdal \
         libgdal-dev \
@@ -79,16 +76,13 @@ ENV ARW_CONFIGURE_OPTION 3
 ENV PYTHONPATH $PREFIX/lib/python2.7/site-packages
 ENV PATH $PATH:$PREFIX/bin:$NCARG_ROOT/bin:$GRADS:$GRADS/gribmap:$PREFIX/cnvgrib-1.4.1:$PREFIX/WPS:$PREFIX/WRFV3/test/em_real:$PREFIX/WRFV3/main:$PREFIX/WRFV3/run:$PREFIX/WPS:$PREFIX/ARWpost:$PREFIX
 RUN mkdir -p /home/wrf && \
-    mkdir -p $PYTHONPATH && \
-    useradd wrf -d /home/wrf && \
-    chown -R wrf:wrf /home/wrf
+    mkdir -p $PYTHONPATH
 RUN ulimit -s unlimited
 COPY requirements.yml $PREFIX
 RUN pip install --upgrade pip pip
 RUN pip install --upgrade pip setuptools
 RUN pip install -r requirements.yml
 COPY build.sh $PREFIX
-USER wrf
 RUN ./build.sh
 COPY scripts $PREFIX
 COPY entrypoint.sh $PREFIX
